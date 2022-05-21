@@ -1,26 +1,41 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <component :is="navigate"></component>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+  import twitch from '@/utils/twitch'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  const store = useStore()
+  const viewer = computed(() => store.state.viewer)
+  const navigate = computed(() => {
+    if (viewer.value?.id) {
+      return MainPage
+    }
+    return AuthPage
+  });
+
+  onMounted( () => {
+    twitch.onAuthorized(async function (auth) {
+      await store.dispatch('setAuth', auth);
+      await store.dispatch('setViewer');
+      if (viewer.value?.id) {
+        await store.dispatch('fetchUserData');
+      }
+    })
+  })
+
+
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  body {
+    background: #1f1f23;
+    color: white;
+    padding: 0;
+    margin: 0;
+    font-family: Inter,Roobert,Helvetica Neue,Helvetica,Arial,sans-serif;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
 </style>
