@@ -1,17 +1,37 @@
 <template>
-  <h2>Welcome, {{ username }}</h2>
-  <p>Auth data: {{ authData }}</p>
-  <p>List: {{ list }}</p>
+  <div class="list">
+    <ul>
+      <li v-for="(user, index) in list"
+        :key="index">
+        {{ user.username }}
+      </li>
+    </ul>
+    <button @click="join" v-if="isInQueue">Join</button>
+    <button @click="leave" v-else>Leave</button>
+  </div>
 </template>
 
 <script setup>
   import { useStore } from 'vuex'
   import { computed, onMounted } from 'vue'
+import { join } from 'path';
 
   const store = useStore()
-  const username = computed(() => store.state.username);
   const list = computed(() => store.state.list);
-  const authData = store.state.auth;
+  const username = computed(() => store.state.username);
+  isInQueue = () => {
+    return list.some( item => {
+      return item.username === username
+    })
+  }
+
+  join = () => {
+    store.dispatch('joinQueue');
+  }
+
+  leave = () => {
+    store.dispatch('leaveQueue');
+  }
 
   onMounted( () => {
     store.dispatch('fetchList');
