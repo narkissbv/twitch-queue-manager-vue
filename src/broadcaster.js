@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import BroadcasterPage from './views/BroadcasterPage'
 import store from './store'
 
-createApp(App)
+createApp(BroadcasterPage)
 .use(store)
 .mount('#app')

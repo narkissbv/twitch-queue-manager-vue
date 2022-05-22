@@ -1,22 +1,17 @@
 <template>
-  <component :is="navigate"></component>
+  <h2>Broadcaster page</h2>
+  <p>{{ username }}</p>
+  <p>{{ viewer }}</p>
 </template>
 
 <script setup>
-  import twitch from '@/utils/twitch'
   import { useStore } from 'vuex'
   import { computed, onMounted } from 'vue'
-  import MainPage from './views/MainPage';
-  import AuthPage from './views/AuthPage';
+  import twitch from '@/utils/twitch'
 
   const store = useStore()
+  const username = computed(() => store.state.username);
   const viewer = computed(() => store.state.viewer)
-  const navigate = computed(() => {
-    if (viewer.value?.id) {
-      return MainPage
-    }
-    return AuthPage
-  });
 
   onMounted( () => {
     twitch.onAuthorized(async function (auth) {
