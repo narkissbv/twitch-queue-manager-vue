@@ -14,22 +14,21 @@
 <script setup>
   import { useStore } from 'vuex'
   import { computed, onMounted } from 'vue'
-import { join } from 'path';
 
   const store = useStore()
   const list = computed(() => store.state.list);
   const username = computed(() => store.state.username);
-  isInQueue = () => {
+  const isInQueue = computed(() => {
     return list.some( item => {
-      return item.username === username
-    })
-  }
+      return item.username === username.value
+    });
+  });
 
-  join = () => {
+  function join () {
     store.dispatch('joinQueue');
   }
 
-  leave = () => {
+  function leave () {
     store.dispatch('leaveQueue');
   }
 
