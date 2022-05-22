@@ -8,6 +8,7 @@ const store = createStore({
     auth: null,
     viewer: null,
     username: '',
+    list: [],
    }
   },
 
@@ -16,10 +17,13 @@ const store = createStore({
       state.auth = auth;
     },
     setUsername(state, user) {
-      state.username = user.data.data[0].display_name
+      state.username = user.data.data[0].display_name;
     },
     setViewer(state, viewer) {
-      state.viewer = viewer
+      state.viewer = viewer;
+    },
+    setList(state, list) {
+      state.list = list.data;
     },
   },
 
@@ -46,6 +50,40 @@ const store = createStore({
         console.log('Failed API request to retieve user data from Twitch');
       }
     },
+
+    async fetchList(context) {
+      const list = await axios.get('https://twitch.narxx.com/queue.php', {
+        params: {
+          channelId: context.state.auth.channelId,
+          username: context.state.username,
+          command: 'list',
+        }
+      });
+      context.commit('setList', list.data);
+      return list
+    },
+
+    async joinQueue(context) {
+      const resp = await axios.get('https://twitch.narxx.com/queue.php', {
+        params: {
+          channelId: context.state.auth.channelId,
+          username: context.state.username,
+          command: 'join',
+        }
+      })
+      return resp;
+    },
+
+    async leaveQueue(context) {
+      const resp = await axios.get('https://twitch.narxx.com/queue.php', {
+        params: {
+          channelId: context.state.auth.channelId,
+          username: context.state.username,
+          command: 'leave',
+        }
+      })
+      return resp;
+    }
   },
 })
 export default store
