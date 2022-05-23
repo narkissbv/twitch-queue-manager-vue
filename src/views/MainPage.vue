@@ -24,12 +24,14 @@
     });
   });
 
-  function joinQueue () {
-    store.dispatch('joinQueue');
+  async function joinQueue () {
+    await store.dispatch('joinQueue');
+    store.dispatch('fetchList');
   }
 
-  function leaveQueue () {
-    store.dispatch('leaveQueue');
+  async function leaveQueue () {
+    await store.dispatch('leaveQueue');
+    store.dispatch('fetchList');
   }
 
   onMounted( () => {
