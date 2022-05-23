@@ -31,7 +31,7 @@
     color: white;
     padding: 0;
     margin: 0;
-    font-family: Inter,Roobert,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-family: roboto;
     height: 100vh;
     position: relative;
     overflow: hidden;

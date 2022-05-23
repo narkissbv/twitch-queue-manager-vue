@@ -7,7 +7,7 @@
       <qm-list/>
     </div>
     <div class="actions">
-      <button @click="requestAuth" v-if="!viewer.id">Authorize</button>
+      <button @click="requestAuth" v-if="!viewer?.id">Authorize</button>
       <button @click="leaveQueue" v-else-if="isInQueue">Leave</button>
       <button @click="joinQueue" v-else>Join</button>
     </div>
@@ -100,5 +100,9 @@
     width: 90%;
     height: 100%;
     cursor: pointer;
+    background: #ff00a1;
+    color: #fff;
+    border-radius: 20px;
+    font-size: 24px;
   }
 </style>
