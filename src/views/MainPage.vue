@@ -6,8 +6,8 @@
         {{ user.username }}
       </li>
     </ul>
-    <button @click="join" v-if="isInQueue">Join</button>
-    <button @click="leave" v-else>Leave</button>
+    <button @click="leaveQueue" v-if="isInQueue">Leave</button>
+    <button @click="joinQueue" v-else>Join</button>
   </div>
 </template>
 
@@ -19,16 +19,16 @@
   const list = computed(() => store.state.list);
   const username = computed(() => store.state.username);
   const isInQueue = computed(() => {
-    return list.some( item => {
+    return list.value.some( item => {
       return item.username === username.value
     });
   });
 
-  function join () {
+  function joinQueue () {
     store.dispatch('joinQueue');
   }
 
-  function leave () {
+  function leaveQueue () {
     store.dispatch('leaveQueue');
   }
 
