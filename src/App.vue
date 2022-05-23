@@ -1,5 +1,5 @@
 <template>
-  <component :is="navigate"></component>
+  <main-page/>
 </template>
 
 <script setup>
@@ -7,16 +7,9 @@
   import { useStore } from 'vuex'
   import { computed, onMounted } from 'vue'
   import MainPage from './views/MainPage';
-  import AuthPage from './views/AuthPage';
 
   const store = useStore()
   const viewer = computed(() => store.state.viewer)
-  const navigate = computed(() => {
-    if (viewer.value?.id) {
-      return MainPage
-    }
-    return AuthPage
-  });
 
   onMounted( () => {
     twitch.onAuthorized(async function (auth) {
@@ -41,5 +34,9 @@
     height: 100vh;
     position: relative;
     overflow: hidden;
+  }
+
+  #app {
+    height: 100%;
   }
 </style>
