@@ -4,7 +4,7 @@
       <qm-header/>
     </div>
     <div class="list">
-      <queue-list/>
+      <qm-list/>
     </div>
     <div class="actions">
       <button @click="requestAuth" v-if="!viewer.id">Authorize</button>
@@ -16,9 +16,9 @@
 
 <script setup>
   import { useStore } from 'vuex'
-  import { computed, onMounted } from 'vue'
+  import { computed } from 'vue'
   import QmHeader from '@/components/QmHeader'
-  import QueueList from '@/components/QueueList';
+  import QmList from '@/components/QmList';
   import twitch from '@/utils/twitch'
 
   const store = useStore()
@@ -45,16 +45,12 @@
     twitch.actions.requestIdShare();
   }
 
-  onMounted( () => {
-    store.dispatch('fetchList');
-  });
 </script>
 
 <style scoped>
   .wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     height: 100%;
   }
   .header {
@@ -64,9 +60,38 @@
     font-size: 20px
   }
   .list {
-    max-height: calc(100% - 100px);
+    height: calc(100% - 100px);
     overflow-y: auto;
   }
+
+  .list::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #808080;
+  }
+
+  .list::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+  }
+
+  .list::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #d3d3d3;
+  }
+
+  /* .list::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 40px;
+    position: absolute;
+    bottom: 50px;
+    background-image: linear-gradient(transparent, #1f1f23);
+  } */
   .actions {
     height: 50px;
     text-align: center;

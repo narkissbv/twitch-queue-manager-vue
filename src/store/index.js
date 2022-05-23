@@ -33,7 +33,9 @@ const store = createStore({
     },
 
     setViewer({ commit }) {
-      commit('setViewer', twitch.viewer)
+      if (twitch.viewer) {
+        commit('setViewer', twitch.viewer)
+      }
     },
 
     async fetchUserData(context) {
