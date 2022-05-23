@@ -73,7 +73,6 @@
 
   .list::-webkit-scrollbar {
     width: 6px;
-    background-color: #F5F5F5;
   }
 
   .list::-webkit-scrollbar-thumb {
