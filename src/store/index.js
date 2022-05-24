@@ -9,6 +9,7 @@ const store = createStore({
     viewer: null,
     username: '',
     list: [],
+    isLoading: false,
    }
   },
 
@@ -25,6 +26,10 @@ const store = createStore({
     setList(state, list) {
       state.list = list.data;
     },
+    setLoader(state, isLoading) {
+      // console.log('mutating loader', isLoading);
+      state.isLoading = isLoading;
+    }
   },
 
   actions: {
@@ -54,38 +59,52 @@ const store = createStore({
     },
 
     async fetchList(context) {
-      const list = await axios.get('https://twitch.narxx.com/queue.php', {
-        params: {
-          channelId: context.state.auth.channelId,
-          username: context.state.username,
-          command: 'list',
-        }
-      });
-      context.commit('setList', list.data);
-      return list
+      try {
+        const list = await axios.get('https://twitch.narxx.com/queue.php', {
+          params: {
+            channelId: context.state.auth.channelId,
+            username: context.state.username,
+            command: 'list',
+          }
+        });
+        context.commit('setList', list.data);
+        return list
+      } catch(e) {
+        console.log('Error fetching queue', e);
+      }
     },
 
     async joinQueue(context) {
-      const resp = await axios.get('https://twitch.narxx.com/queue.php', {
-        params: {
-          channelId: context.state.auth.channelId,
-          username: context.state.username,
-          command: 'join',
-        }
-      })
-      return resp;
+      try {
+        return await axios.get('https://twitch.narxx.com/queue.php', {
+          params: {
+            channelId: context.state.auth.channelId,
+            username: context.state.username,
+            command: 'join',
+          }
+        })
+      } catch (e) {
+        console.log('Error joining queue', e);
+      }
     },
 
     async leaveQueue(context) {
-      const resp = await axios.get('https://twitch.narxx.com/queue.php', {
-        params: {
-          channelId: context.state.auth.channelId,
-          username: context.state.username,
-          command: 'leave',
-        }
-      })
-      return resp;
-    }
+      try {
+        return await axios.get('https://twitch.narxx.com/queue.php', {
+          params: {
+            channelId: context.state.auth.channelId,
+            username: context.state.username,
+            command: 'leave',
+          }
+        })
+      } catch (e) {
+        console.log('Error leaving queue', e);
+      }
+    },
+
+    setLoader({ commit }, isLoading) {
+      commit('setLoader', isLoading);
+    },
   },
 })
 export default store

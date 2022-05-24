@@ -1,5 +1,5 @@
 <template>
-  <div class="title">Twitch Queue Manager</div>
+  <div class="title">Queue Manager</div>
 </template>
 
 <script setup>
@@ -8,10 +8,10 @@
 
 <style scoped>
   .title {
-    background: -webkit-linear-gradient(#fff, #ff00a1);
+    background: -webkit-linear-gradient(#d13838,#9147ff);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-weight: 900;
+    font-size: 30px;
   }
 </style>

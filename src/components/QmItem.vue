@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <div class="index">
-      {{ index }}
+      {{ index + 1 }}
     </div>
     <div class="name">
       {{ user }}
