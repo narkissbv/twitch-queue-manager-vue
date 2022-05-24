@@ -1,16 +1,16 @@
 <template>
-  <h2>Broadcaster page</h2>
-  <p>{{ username }}</p>
-  <p>{{ viewer }}</p>
+  <qm-header/>
+  <qm-list/>
 </template>
 
 <script setup>
   import { useStore } from 'vuex'
   import { computed, onMounted } from 'vue'
+  import QmList from '@/components/QmList'
+  import QmHeader from '@/components/QmHeader.vue';
   import twitch from '@/utils/twitch'
 
   const store = useStore()
-  const username = computed(() => store.state.username);
   const viewer = computed(() => store.state.viewer)
 
   onMounted( () => {

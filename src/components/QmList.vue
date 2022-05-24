@@ -13,6 +13,7 @@
 
   const store = useStore()
   const list = computed(() => store.state.list);
+
 </script>
 
 <style scoped>

@@ -102,6 +102,54 @@ const store = createStore({
       }
     },
 
+    async promote(context, username) {
+      try {
+        const resp = await axios.get('https://twitch.narxx.com/queue.php', {
+          params: {
+            channelId: context.state.auth.channelId,
+            username: username,
+            command: 'up',
+          }
+        })
+        await context.dispatch('fetchList');
+        return resp;
+      } catch(e) {
+        console.log(`Error promoting ${username}`, e);
+      }
+    },
+
+    async demote(context, username) {
+      try {
+        const resp = await axios.get('https://twitch.narxx.com/queue.php', {
+          params: {
+            channelId: context.state.auth.channelId,
+            username: username,
+            command: 'down',
+          }
+        })
+        await context.dispatch('fetchList');
+        return resp;
+      } catch(e) {
+        console.log(`Error demoting ${username}`, e);
+      }
+    },
+
+    async removeFromQueue(context, username) {
+      try {
+        const resp = await axios.get('https://twitch.narxx.com/queue.php', {
+          params: {
+            channelId: context.state.auth.channelId,
+            username: username,
+            command: 'leave',
+          }
+        })
+        await context.dispatch('fetchList');
+        return resp;
+      } catch(e) {
+        console.log(`Error removing ${username}`, e);
+      }
+    },
+
     setLoader({ commit }, isLoading) {
       commit('setLoader', isLoading);
     },
