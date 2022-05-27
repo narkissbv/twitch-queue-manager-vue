@@ -1,13 +1,23 @@
 <template>
   <qm-header/>
-  <qm-list/>
+  <div class="flex">
+    <div class="list">
+      <qm-list/>
+    </div>
+    <div class="live-config">
+      <qm-live-config/>
+    </div>
+  </div>
+  <qm-loader/>
 </template>
 
 <script setup>
   import { useStore } from 'vuex'
   import { computed, onMounted } from 'vue'
   import QmList from '@/components/QmList'
-  import QmHeader from '@/components/QmHeader.vue';
+  import QmHeader from '@/components/QmHeader';
+  import QmLiveConfig from '@/components/QmLiveConfig';
+  import QmLoader from '@/components/QmLoader';
   import twitch from '@/utils/twitch'
 
   const store = useStore()
@@ -20,6 +30,8 @@
       if (viewer.value?.id) {
         await store.dispatch('fetchUserData');
       }
+      store.dispatch('fetchList');
+      store.dispatch('fetchConfig');
     })
   })
 
@@ -36,5 +48,38 @@
     height: 100vh;
     position: relative;
     overflow: hidden;
+  }
+</style>
+
+<style scoped>
+  .flex {
+    display: flex;
+    justify-content: space-between;
+  }
+  .list {
+    overflow-y: auto;
+    flex: 3;
+    max-height: calc(100vh - 60px);
+  }
+
+  .list::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #808080;
+  }
+
+  .list::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .list::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #d3d3d3;
+  }
+  .live-config {
+    margin: 0 25px;
   }
 </style>

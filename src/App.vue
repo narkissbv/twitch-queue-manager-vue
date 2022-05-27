@@ -14,11 +14,12 @@
   onMounted( () => {
     twitch.onAuthorized(async function (auth) {
       await store.dispatch('setAuth', auth);
-      await store.dispatch('fetchList');
       await store.dispatch('setViewer');
       if (viewer.value?.id) {
         await store.dispatch('fetchUserData');
       }
+      store.dispatch('fetchList');
+      store.dispatch('fetchConfig');
     })
   })
 

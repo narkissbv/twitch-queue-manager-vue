@@ -36,6 +36,7 @@
   })
 
   const store = useStore()
+  const list = computed(() => store.state.list);
   const viewer = computed(() => store.state.viewer);
   const isAdmin = computed(() => {
     switch (viewer?.value?.role) {
@@ -48,6 +49,7 @@
   })
 
   const moveUp = async () => {
+    if (props.index === 0) return;
     console.log(`promoting ${props.user}`);
     store.dispatch('setLoader', true);
     await store.dispatch('promote', props.user);
@@ -55,6 +57,7 @@
   }
 
   const moveDown = async () => {
+    if (props.index + 1 === list.value.length) return;
     console.log(`demoting ${props.user}`);
     store.dispatch('setLoader', true);
     await store.dispatch('demote', props.user);
@@ -100,9 +103,11 @@
     display: flex;
     width: 90px;
     height: 30px;
+    align-items: center;
   }
   .actions .action {
     width: 30px;
+    height: 24px;
     text-align: center;
     cursor: pointer;
   }

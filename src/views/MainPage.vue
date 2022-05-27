@@ -18,10 +18,14 @@
         Leave
       </button>
       <button @click="joinQueue"
-              v-else
+              v-else-if="isActive && isRoleMatch"
               class="button-85">
         Join
       </button>
+      <div class="offline" v-else>
+        <h2 v-if="!isActive">Queue is now closed</h2>
+        <h2 v-else-if="!isRoleMatch">Queue is open for {{ configRole }}</h2>
+      </div>
     </div>
   </div>
   <qm-loader/>
@@ -39,6 +43,30 @@
   const list = computed(() => store.state.list);
   const username = computed(() => store.state.username);
   const viewer = computed(() => store.state.viewer);
+  const auth = computed(() => store.state.auth);
+  const isActive = computed(() => store.state.config.isActive);
+  const configRole = computed(() => store.state.config.role);
+  const isRoleMatch = computed(() => {
+    if (auth.value.role === 'broadcaster') {
+      return true;
+    }
+    switch(configRole.value) {
+      case 'subs':
+        if (viewer.value.subscriptionStatus?.tier) {
+          return true;
+        }
+        return false;
+      case 'mods':
+        if (auth.value.role === 'moderator') {
+          return true;
+        }
+        return false;
+      case 'viewers':
+      default:
+        return true
+
+    }
+  });
   const isInQueue = computed(() => {
     return list.value.some( item => {
       return item.username === username.value
@@ -47,7 +75,10 @@
 
   const joinQueue = async () => {
     store.dispatch('setLoader', true);
-    await store.dispatch('joinQueue');
+    await store.dispatch('fetchConfig');
+    if (isRoleMatch.value) {
+      await store.dispatch('joinQueue');
+    }
     await store.dispatch('fetchList');
     store.dispatch('setLoader', false);
   }
@@ -56,6 +87,7 @@
     store.dispatch('setLoader', true);
     await store.dispatch('leaveQueue');
     await store.dispatch('fetchList');
+    await store.dispatch('fetchConfig');
     store.dispatch('setLoader', false);
   }
 
@@ -71,13 +103,8 @@
     flex-direction: column;
     height: 100%;
   }
-  .header {
-    height: 50px;
-    text-align: center;
-    line-height: 50px;
-  }
   .list {
-    height: 390px;
+    flex: 1;
     overflow-y: auto;
   }
 
@@ -111,7 +138,9 @@
     font-size: 24px;
     padding: 0;
   }
-
+  .actions .offline {
+    margin: 17px;
+  }
  /* Taken from https://getcssscan.com/css-buttons-examples */
 .button-85 {
   padding: 0.6em 2em;

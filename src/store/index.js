@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import axios from 'axios';
 import twitch from '@/utils/twitch'
+import { sendAPI } from '@/utils/utils';
 
 const store = createStore({
  state() {
@@ -10,6 +11,10 @@ const store = createStore({
     username: '',
     list: [],
     isLoading: false,
+    config: {
+      role: "viewers",
+      isActive: false,
+    },
    }
   },
 
@@ -27,9 +32,12 @@ const store = createStore({
       state.list = list.data;
     },
     setLoader(state, isLoading) {
-      // console.log('mutating loader', isLoading);
       state.isLoading = isLoading;
-    }
+    },
+    setConfig(state, config) {
+      state.config.role = config.role
+      state.config.isActive = config.isActive
+    },
   },
 
   actions: {
@@ -152,6 +160,32 @@ const store = createStore({
 
     setLoader({ commit }, isLoading) {
       commit('setLoader', isLoading);
+    },
+
+    async fetchConfig(context) {
+      try {
+        const resp = await axios.get('https://twitch.narxx.com/queue_config.php', {
+          params: {
+            channelId: context.state.auth.channelId
+          }
+        })
+        context.commit('setConfig', resp.data.data);
+        return resp;
+      } catch(e) {
+        console.log('Failed fetching config', e);
+      }
+    },
+
+    async changeConfig(context, config) {
+      if (!context.state.auth?.channelId) return;
+      config.channelId = context.state.auth.channelId
+      try {
+        const resp = await sendAPI(config);
+        await context.dispatch('fetchConfig');
+        return resp;
+      } catch (e) {
+        console.log('Failed changing config', e);
+      }
     },
   },
 })
