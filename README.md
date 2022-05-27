@@ -21,7 +21,7 @@ npm run lint
 ```
 
 ### Based on
-This extension code is based on the `twitch-vie-boilerplate`
+This extension code is based on the `twitch-vue-boilerplate`
 ```
 https://github.com/narkissbv/twitch-vue-boilerplate
 ```
