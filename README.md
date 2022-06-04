@@ -20,5 +20,8 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Based on
+This extension code is based on the `twitch-vue-boilerplate`
+```
+https://github.com/narkissbv/twitch-vue-boilerplate
+```
