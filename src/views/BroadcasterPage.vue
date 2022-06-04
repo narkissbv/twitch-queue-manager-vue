@@ -60,6 +60,7 @@
     overflow-y: auto;
     flex: 3;
     max-height: calc(100vh - 60px);
+    z-index: 1;
   }
 
   .list::-webkit-scrollbar-track {
